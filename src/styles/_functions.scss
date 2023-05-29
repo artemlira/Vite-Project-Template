@@ -1,0 +1,17 @@
+@use 'variables.scss' as v;
+
+// % translation function
+@function pr($sizeBox , $size) {
+  @return calc($size / $sizeBox * 100%);
+}
+
+// the ratio function for line-height
+@function ratio($sizeBox, $size) {
+  @return calc($size / $sizeBox);
+}
+
+// function to translate to vw, where the number specifies the maximum size of the layout.
+// For example:  width: f.vw(340, 768); 340 - is the size of the item, and 768 is the screen size.
+@function vw($value, $base: v.$maxWidth) {
+  @return calc($value / $base * 100vw);
+}

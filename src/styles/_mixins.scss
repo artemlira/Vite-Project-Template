@@ -1,0 +1,80 @@
+@use 'variables.scss' as v;
+@use 'functions.scss' as f;
+
+// Адаптивный шрифт ================================================================
+// пример использования @include m.font(53, 20);  53 - размер по макету, 20- размер который подходит под минимальное разрешение
+
+// @mixin font($pcSize, $mobSize) {
+//   $addSize: $pcSize - $mobSize;
+//   $addMobSize: $addSize +$addSize * 0.0000007;
+
+//   @media (max-width: 767px) {
+//     font-size: calc(#{$mobSize + px} + #{$addMobSize} * ((100vw - 320px) / #{v.$maxWidth}));
+//   }
+
+//   @media (min-width: 767px) {
+//     font-size: calc(#{$mobSize + px} + #{$addMobSize} * (100vw / #{v.$maxWidth}));
+//   }
+// }
+
+
+//=====================================================================================
+// Медиазапросы
+// пример пользования  @include m.notebook {gap: rem(50px);}
+
+@mixin laptop {
+  @media screen and (max-width:1260px) {
+    @content;
+  }
+}
+
+@mixin netbook {
+  @media screen and (max-width:992px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (max-width:768px) {
+    @content;
+  }
+}
+
+@mixin phone {
+  @media screen and (max-width:480px) {
+    @content;
+  }
+}
+
+//=====================================================================================
+
+//Адаптивное значение
+//пример пользования @include m.adaptiv-value('gap', 36, 1, 0); 'gap' - это параметр который меняется, 36 - начальный размер по макету, 1- значение до которого нужно изменить, 0-условие
+
+
+@mixin adaptiv-value($property, $startSize, $minSize, $type) {
+  $addSize: $startSize - $minSize;
+
+  @if $type==1 {
+    // Только если меньше контейнера
+    #{$property}: $startSize + px;
+
+    @media (max-width: #{v.$maxWidthContainer + px}) {
+      #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{v.$maxWidthContainer - 320}));
+    }
+  }
+
+  @else if $type==2 {
+    // Только если больше контейнера
+    #{$property}: $startSize + px;
+
+    @media (min-width: #{v.$maxWidthContainer + px}) {
+      #{$property}: calc(#{$minSize + px} #{$addSize} * ((100vw - 320px) / #{v.$maxWidth - 320}));
+    }
+  }
+
+  @else {
+    // Всегда
+    #{$property}: calc(#{$minSize + px} + #{$addSize} * ((100vw - 320px) / #{v.$maxWidth - 320}));
+  }
+}
